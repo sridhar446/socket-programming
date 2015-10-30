@@ -21,7 +21,7 @@ int main(int argc, char const *argv[])
 
 	server_address.sin_family = AF_INET;
 	server_address.sin_addr.s_addr = inet_addr("127.0.0.1");
-	server_address.sin_port = 9734;
+	server_address.sin_port = 5000;
 //	strcpy(server_address.sin_path, "server_socket");
 	server_len = sizeof(server_address);
 	bind(server_sockfd,(struct sockaddr *)&server_address, server_len);
@@ -31,20 +31,22 @@ int main(int argc, char const *argv[])
 	signal(SIGCHLD, SIG_IGN);
 	
 	while(1){
-		char ch[10];
-		printf("server waiting\n");
+		char rxBuffer[10],txBuffer[10];
+		//printf("server waiting\n");
 	
 
 	client_len = sizeof(client_address);
 	client_sockfd = accept(server_sockfd, (struct sockaddr *)&client_address, &client_len);
 
 	if(fork() == 0){
-
-		read(client_sockfd, ch, 10);
+/*
+		read(client_sockfd, rxBuffer, 10);
 		sleep(1);
-		//ch = "I got you";
-		
-		write(client_sockfd,ch,10);
+		printf("client: %s\n", rxBuffer);
+*/		//++ch[0];
+		read(0,txBuffer,10);
+//		printf("server:");
+		write(client_sockfd,txBuffer,10);
 		close(client_sockfd);
 		exit(0);
 		}
